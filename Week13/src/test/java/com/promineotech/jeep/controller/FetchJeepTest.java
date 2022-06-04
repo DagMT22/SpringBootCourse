@@ -1,6 +1,7 @@
 package com.promineotech.jeep.controller;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -53,9 +54,11 @@ class FetchJeepTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     
     //and
+    List<Jeep> actual = response.getBody();
     List<Jeep> expected = buildExpected();
 //    System.out.println(expected);
-    assertThat(response.getBody()).isEqualTo(expected);
+//    actual.forEach(jeep -> jeep.setModelPK(null));
+    assertThat(actual).isEqualTo(expected);
   }
   private List<Jeep> buildExpected() {
       List<Jeep> list = new LinkedList<>();
@@ -74,6 +77,8 @@ class FetchJeepTest {
           .wheelSize(17)
           .basePrice(new BigDecimal("31975.00"))
           .build());
+      
+      Collections.sort(list);
       
       return list;
     }
