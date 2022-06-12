@@ -21,6 +21,7 @@ public class DefaultJeepSalesDao implements JeepSalesDao {
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
+  
   @Override
   public List<Jeep> fetchJeeps(JeepModel model, String trim) {
     log.debug("DAO: model = {}, trim = {}", model, trim);

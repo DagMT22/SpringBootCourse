@@ -1,9 +1,11 @@
 package com.promineotech.jeep.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +21,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -43,12 +44,11 @@ class FetchJeepTest {
     String trim = "Sport";
     String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
     
-    System.out.println(uri);
+//    System.out.println(uri);
    
     //when
     ResponseEntity<List<Jeep>> response = restTemplate.exchange(uri, 
         HttpMethod.GET, null, new ParameterizedTypeReference<>() {});    
-       
     
     //then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -56,10 +56,59 @@ class FetchJeepTest {
     //and
     List<Jeep> actual = response.getBody();
     List<Jeep> expected = buildExpected();
-//    System.out.println(expected);
-//    actual.forEach(jeep -> jeep.setModelPK(null));
     assertThat(actual).isEqualTo(expected);
   }
+  
+  @Test  
+  void testThatAnErrorMessageIsReturnedWhenAnInvalidTrimIsSupplied() {
+    //given
+    JeepModel model = JeepModel.WRANGLER;
+    String trim = "Invalid Value";
+    String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
+    
+//    System.out.println(uri);
+   
+    //when
+    ResponseEntity< Map<String, Object>> response = restTemplate.exchange(uri, 
+        HttpMethod.GET, null, new ParameterizedTypeReference<>() {});    
+    
+    //then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    
+    //and
+    Map<String, Object> error = response.getBody();
+    
+    assertThat(error) .containsKey("message")
+                      .containsEntry("status code", HttpStatus.NOT_FOUND.value())
+                      .containsEntry("uri", "/jeeps")
+                      .containsKey("timestamp")
+                      .containsEntry("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+  }
+  
+//  @Test  
+//  void testThatJeepsAreReturnedWhenAValidModelAndTrimAreSupplied() {
+//    //given
+//    JeepModel model = JeepModel.WRANGLER;
+//    String trim = "Sport";
+//    String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
+//    
+//    System.out.println(uri);
+//   
+//    //when
+//    ResponseEntity<List<Jeep>> response = restTemplate.exchange(uri, 
+//        HttpMethod.GET, null, new ParameterizedTypeReference<>() {});    
+//    
+//    //then
+//    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//    
+//    //and
+//    List<Jeep> actual = response.getBody();
+//    List<Jeep> expected = buildExpected();
+//    assertThat(actual).isEqualTo(expected);
+//  }
+  
+  
+  
   private List<Jeep> buildExpected() {
       List<Jeep> list = new LinkedList<>();
       
