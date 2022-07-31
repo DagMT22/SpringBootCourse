@@ -1,0 +1,57 @@
+ReadVariantTest
+in PostMan
+GET localhost:8080/variant?variantId=SARS-CoV-2-DELTA
+input: SARS-CoV-2-DELTA
+returns:
+[
+  {
+    "variantId": "SARS-CoV-2-DELTA",
+    "variantName": "Delta",
+    "diseaseName": "Covid-19",
+    "infectiousTimeRange": 20
+  }
+]
+
+CreateIndividualTest
+in PostMan
+POST localhost:8080/addIndividual
+input:
+{
+    "full_name": "TestName",
+    "date_of_birth": "1990-01-01",
+    "phone": "123-123-1234",
+    "home_address": "123 Home St, Location US",
+    "county": "County"
+}
+
+
+CreateCaseTest
+in PostMan
+POST localhost:8080/addCase
+input:
+{
+	"variant_id": "SARS-CoV-2-DELTA",
+	"test_method": "Covid-Rapid",
+	"patient_id": "10",
+	"detected_date": "2022-04-01",
+	"exposure_date": "2022-03-25",
+	"exposure_location": "200 N Grand Ave, Los Angeles, CA 90012",
+	"notes": "test note"
+}
+
+ReadContactTest
+
+
+
+CreateContactTest
+in PostMan
+
+input:
+{
+	"case_id":"1",
+	"personal_id":"10",
+	"contact_date":"2022-04-29",
+	"location":"6898 Raleigh Rd, San Jose, CA 95123",
+	"notes":""
+}
+	

@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: contact
+    password: contact
+    url: jdbc:mysql://localhost:3306/contact
+
+logging:
+  level:
+    root: warn
+    '[com.promineotech]': debug
