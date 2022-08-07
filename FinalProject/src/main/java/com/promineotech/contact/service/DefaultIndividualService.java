@@ -17,7 +17,7 @@ public class DefaultIndividualService implements IndividualService {
 
 	@Override
 	public Individual createIndividual(Individual individual) {
-		log.debug("Service: Individual={}", individual);
+		log.debug("Service: Individual = {}", individual);
 		
 		String full_name = individual.getFull_name();
 		String date_of_birth = individual.getDate_of_birth();

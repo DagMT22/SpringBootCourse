@@ -26,8 +26,8 @@ public class DefaultContactDao implements ContactDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<Contact> fetchContacts(int id) {
-		log.debug("Dao: contact Id = {}", id);
+	public List<Contact> readContacts(int id) {
+		
 		
 		String sql = "SELECT * FROM contacts WHERE contact_id = :contact_id";
 		Map<String, Integer> params = new HashMap<>();
@@ -37,16 +37,16 @@ public class DefaultContactDao implements ContactDao {
 
 			@Override
 			public Contact mapRow(ResultSet rs, int rowNum) throws SQLException {
-				// TODO Auto-generated method stub
-				return Contact.builder()
+				Contact result = Contact.builder()
 						.contact_id(rs.getInt("contact_id"))
 						.case_id(rs.getInt("case_id"))
 						.personal_id(rs.getInt("personal_id"))
 						.contact_date(rs.getDate("contact_date").toString())
 						.location(rs.getString("location"))
 						.notes(rs.getString("notes"))
-						.build()
-						;
+						.build();
+				log.debug("Dao: contact Id = {}, {}", id, result);
+				return result;
 			}
 			
 			
@@ -69,17 +69,63 @@ public class DefaultContactDao implements ContactDao {
 		params.addValue("notes", notes);
 		KeyHolder keyholder = new GeneratedKeyHolder();
 		
-		jdbcTemplate.update(sql, params, keyholder);
+		int rows = jdbcTemplate.update(sql, params, keyholder);
+		
 		int contact_id = keyholder.getKey().intValue();
-				
-		return Contact.builder()
+		Contact result = Contact.builder()
 				.contact_id(contact_id)
 				.case_id(case_id)
 				.personal_id(personal_id)
 				.contact_date(contact_date)
 				.location(location)
 				.notes(notes)
-				.build();
+				.build();	
+		log.debug("Dao: Rows Created = {}, {}", rows, result);	
+		return result;
+	}
+	
+	@Override
+	public Contact updateContact(int contact_id, int case_id, int personal_id, String contact_date, String location,
+			String notes) {
+		String sql = "UPDATE contacts SET "
+				+ "case_id = :case_id, "
+				+ "personal_id = :personal_id, "
+				+ "contact_date = :contact_date, "
+				+ "location = :location, "
+				+ "notes = :notes "
+				+ "WHERE contact_id = :contact_id;";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("contact_id", contact_id);
+		params.addValue("case_id", case_id);
+		params.addValue("personal_id", personal_id);
+		params.addValue("contact_date", contact_date);
+		params.addValue("location", location);
+		params.addValue("notes", notes);
+		
+		int rows = jdbcTemplate.update(sql, params);
+		Contact result = Contact.builder()
+				.contact_id(contact_id)
+				.case_id(case_id)
+				.personal_id(personal_id)
+				.contact_date(contact_date)
+				.location(location)
+				.notes(notes)
+				.build();		
+		log.debug("Dao: Rows Updated = {}, {}", rows, result);
+				
+		return result;
+	}
+	@Override
+	public int deleteContact(int id) {
+		String sql = "DELETE FROM contacts WHERE "
+				+ "contact_id = :contact_id;";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("contact_id", id);
+		
+		int rows = jdbcTemplate.update(sql, params);
+		log.debug("Dao: Rows Deleted = {}", rows);
+		
+		return rows;
 	}
 	
 }

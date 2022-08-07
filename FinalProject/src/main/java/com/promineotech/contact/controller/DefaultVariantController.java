@@ -18,9 +18,9 @@ public class DefaultVariantController implements VariantController {
 	private VariantService variantService;
 
 	@Override
-	public List<Variant> fetchVariant(String variantId) {
-		log.debug("variant Id = {}", variantId);
-		return variantService.fetchVariants(variantId);
+	public List<Variant> readVariant(String variantId) {
+		log.debug("Controller: Variant Id = {}", variantId);
+		return variantService.readVariants(variantId);
 	}
 
 }

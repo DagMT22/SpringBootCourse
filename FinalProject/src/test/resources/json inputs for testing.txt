@@ -40,12 +40,24 @@ input:
 }
 
 ReadContactTest
-
+in PostMan
+Get localhost:8080/contacts/1
+returns:
+[
+    {
+        "contact_id": 1,
+        "case_id": 1,
+        "personal_id": 2,
+        "contact_date": "2022-04-20",
+        "location": "85 S Second St, San Jose, CA 95113",
+        "notes": "Test Note"
+    }
+]
 
 
 CreateContactTest
 in PostMan
-
+POST localhost:8080/contacts/
 input:
 {
 	"case_id":"1",
@@ -54,4 +66,16 @@ input:
 	"location":"6898 Raleigh Rd, San Jose, CA 95123",
 	"notes":""
 }
-	
+
+UpdateContactTest
+
+
+input:
+{
+	"contact_id":"9",
+	"case_id":"1",
+	"personal_id":"10",
+	"contact_date":"2022-04-29",
+	"location":"6898 Raleigh Rd, San Jose, CA 95123",
+	"notes":"Update Contact Test Success"
+}

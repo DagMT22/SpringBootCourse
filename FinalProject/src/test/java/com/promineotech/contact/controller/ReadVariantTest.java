@@ -29,7 +29,7 @@ import com.promineotech.contact.entity.Variant;
 		"classpath:sql/contact_tracing_DATA.sql"},
 		config = @SqlConfig(encoding = "utf-8"))
 
-class FetchVariantTest {
+class ReadVariantTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -41,7 +41,7 @@ class FetchVariantTest {
 	void testThatVariantIsReturnedWhenVariantIdIsSupplied() {
 		//given
 		String variantId = "SARS-CoV-2-DELTA";
-		String uri = String.format("http://localhost:%d/variant?variantId=%s", serverPort, variantId);
+		String uri = String.format("http://localhost:%d/variant/%s", serverPort, variantId);
 		
 		//when
 		ResponseEntity<List<Variant>> response = restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});

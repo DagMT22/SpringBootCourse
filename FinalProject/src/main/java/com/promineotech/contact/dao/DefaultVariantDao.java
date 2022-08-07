@@ -23,8 +23,8 @@ public class DefaultVariantDao implements VariantDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public List<Variant> fetchVariants(String variantId) {
-		log.debug("DAO: Variant ID = {}", variantId);
+	public List<Variant> readVariants(String variantId) {
+		log.debug("DAO: Variant Id = {}", variantId);
 		
 		String sql = "SELECT * FROM variants WHERE variant_id = :variant_id";
 		Map<String, String>	params = new HashMap<>();

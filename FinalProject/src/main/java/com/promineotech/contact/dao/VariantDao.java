@@ -6,6 +6,6 @@ import com.promineotech.contact.entity.Variant;
 
 public interface VariantDao {
 
-	List<Variant> fetchVariants(String variantId);
+	List<Variant> readVariants(String variantId);
 	
 }

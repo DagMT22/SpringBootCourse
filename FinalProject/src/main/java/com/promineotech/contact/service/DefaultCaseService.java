@@ -17,7 +17,7 @@ public class DefaultCaseService implements CaseService {
 	
 	@Override
 	public Case createCase(Case inputCase) {
-		log.debug("Service: Case={}", inputCase);
+		log.debug("Service: Case = {}", inputCase);
 		
 		String variant_id = inputCase.getVariant_id();
 		String test_method = inputCase.getTest_method();

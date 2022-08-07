@@ -58,10 +58,9 @@ public class DefaultCaseDao implements CaseDao {
 		SqlParams params = generateInsertSql(variant_id, test_method, patient_id, detected_date, exposure_date, exposure_location, notes);
 		KeyHolder keyholder = new GeneratedKeyHolder();
 		
-		jdbcTemplate.update(params.sql,  params.source, keyholder);
+		int rows = jdbcTemplate.update(params.sql,  params.source, keyholder);
 		int case_id = keyholder.getKey().intValue();
-		
-		return Case.builder()
+		Case result = Case.builder()
 				.case_id(case_id)
 				.variant_id(variant_id)
 				.test_method(test_method)
@@ -71,6 +70,8 @@ public class DefaultCaseDao implements CaseDao {
 				.exposure_location(exposure_location)
 				.notes(notes)
 				.build();
+		log.debug("DAO: Added = {}, {}", rows, result);
+		return result;
 					
 	}
 

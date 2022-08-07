@@ -18,7 +18,7 @@ public class DefaultCaseController implements CaseController {
 	
 	@Override
 	public Case createCase(Case inputCase) {
-		log.debug("Controller: Case={}", inputCase);
+		log.debug("Controller: Case = {}", inputCase);
 		return caseService.createCase(inputCase);
 	}
 

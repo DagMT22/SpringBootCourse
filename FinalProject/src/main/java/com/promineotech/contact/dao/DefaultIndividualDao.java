@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.promineotech.contact.entity.Individual;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class DefaultIndividualDao implements IndividualDao {
 	
 	@Autowired
@@ -48,11 +51,10 @@ public class DefaultIndividualDao implements IndividualDao {
 			String county) {
 		SqlParams params = generateInsertSql(full_name, date_of_birth, phone, home_address, county);
 		KeyHolder keyholder = new GeneratedKeyHolder();
-		jdbcTemplate.update(params.sql, params.source, keyholder);
+		int rows = jdbcTemplate.update(params.sql, params.source, keyholder);
 		
 		int personal_id = keyholder.getKey().intValue();
-		
-		return Individual.builder()
+		Individual result = Individual.builder()
 				.personal_id(personal_id)
 				.full_name(full_name)
 				.date_of_birth(date_of_birth)
@@ -60,6 +62,8 @@ public class DefaultIndividualDao implements IndividualDao {
 				.home_address(home_address)
 				.county(county)
 				.build();
+		log.debug("DAO: Added = {}, {}", rows, result);
+		return result ;
 			}
 
 }

@@ -17,7 +17,7 @@ public class DefaultIndividualController implements IndividualController {
 	
 	@Override
 	public Individual createIndividual(Individual individual) {
-		log.debug("Individual=",individual);
+		log.debug("Controller: Individual = {}",individual);
 		return individualService.createIndividual(individual);
 	}
 

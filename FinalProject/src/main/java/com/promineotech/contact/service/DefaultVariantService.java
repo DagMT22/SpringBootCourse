@@ -18,10 +18,10 @@ public class DefaultVariantService implements VariantService {
 	private VariantDao variantDao;
 
 	@Override
-	public List<Variant> fetchVariants(String variantId) {
-		log.info("variant ID = {}", variantId);
+	public List<Variant> readVariants(String variantId) {
+		log.info("Service: Variant Id = {}", variantId);
 		
-		List<Variant> variant = variantDao.fetchVariants(variantId);
+		List<Variant> variant = variantDao.readVariants(variantId);
 		
 		return variant;
 	}

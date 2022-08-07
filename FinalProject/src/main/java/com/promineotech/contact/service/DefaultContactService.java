@@ -18,9 +18,9 @@ public class DefaultContactService implements ContactService {
 	private ContactDao contactDao;
 	
 	@Override
-	public List<Contact> fetchContacts(int id) {
+	public List<Contact> readContacts(int id) {
 		log.debug("Service: contact Id = {}", id);
-		return contactDao.fetchContacts(id);
+		return contactDao.readContacts(id);
 	}
 
 	@Override
@@ -33,9 +33,27 @@ public class DefaultContactService implements ContactService {
 		String location = contact.getLocation();
 		String notes = contact.getNotes();
 		
-		
-		
 		return contactDao.createContact(case_id, personal_id, contact_date, location, notes);
+	}
+
+	@Override
+	public Contact updateContact(Contact contact) {
+		log.debug("Service: contact = {}", contact);
+		
+		int contact_id = contact.getContact_id();
+		int case_id = contact.getCase_id();
+		int personal_id = contact.getPersonal_id();
+		String contact_date = contact.getContact_date();
+		String location = contact.getLocation();
+		String notes = contact.getNotes();
+		
+		return contactDao.updateContact(contact_id, case_id, personal_id, contact_date, location, notes);
+	}
+
+	@Override
+	public int deleteContact(int id) {
+		log.debug("Service: contact Id = {}", id);
+		return contactDao.deleteContact(id);
 	}
 
 }

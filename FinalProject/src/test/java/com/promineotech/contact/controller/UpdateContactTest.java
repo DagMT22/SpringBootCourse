@@ -1,6 +1,7 @@
 package com.promineotech.contact.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import com.promineotech.contact.entity.Case;
+import com.promineotech.contact.entity.Contact;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 
@@ -27,8 +28,8 @@ import com.promineotech.contact.entity.Case;
 		"classpath:sql/contact_tracing_DATA.sql"},
 		config = @SqlConfig(encoding = "utf-8"))
 
-public class CreateCaseTest {
-
+public class UpdateContactTest {
+	
 	@LocalServerPort
 	private int serverPort;
 
@@ -36,44 +37,38 @@ public class CreateCaseTest {
 	private TestRestTemplate restTemplate;
 	
 	@Test
-	void testCreateCaseReturnsSuccess201() {
+	void testUpdateIndividualReturnsSuccess() {
 		//given
-		String body = createCase();
-		String uri = String.format("http://localhost:%d/case", serverPort);
+		String body = updateContact();
+		String uri = String.format("http://localhost:%d/contact", serverPort);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> bodyEntity = new HttpEntity<>(body, headers);
 		
 		//when
-		ResponseEntity<Case> response = restTemplate.exchange(uri,  HttpMethod.POST, bodyEntity, Case.class);
+		ResponseEntity<Contact> response = restTemplate.exchange(uri,  HttpMethod.PUT, bodyEntity, Contact.class);
 		
 		//then
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-		
-		//and
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
+		Contact resultContact = response.getBody();
+		assertThat(resultContact.getContact_id()).isEqualTo(8);
+		assertThat(resultContact.getCase_id()).isEqualTo(1);
+		assertThat(resultContact.getPersonal_id()).isEqualTo(10);
+		assertThat(resultContact.getContact_date()).isEqualTo("2022-04-29");
+		assertThat(resultContact.getLocation()).isEqualTo("6898 Raleigh Rd, San Jose, CA 95123");
+		assertThat(resultContact.getNotes()).isEqualTo("Update Contact Test Success");
 		
-		//and
-		Case resultCase = response.getBody();
-		assertThat(resultCase.getVariant_id()).isEqualTo("SARS-CoV-2-DELTA");
-		assertThat(resultCase.getTest_method()).isEqualTo("Covid-Rapid");
-		assertThat(resultCase.getPatient_id()).isEqualTo(10);
-		assertThat(resultCase.getDetected_date()).isEqualTo("2022-04-01");
-		assertThat(resultCase.getExposure_date()).isEqualTo("2022-03-25");
-		assertThat(resultCase.getExposure_location()).isEqualTo("200 N Grand Ave, Los Angeles, CA 90012");
-		assertThat(resultCase.getNotes()).isEqualTo("test note");
 	}
-	
-	String createCase() {
+
+	private String updateContact() {
 		return "{\n"
-				+ "   \"variant_id\":\"SARS-CoV-2-DELTA\",\n"
-				+ "   \"test_method\":\"Covid-Rapid\",\n"
-				+ "   \"patient_id\":\"10\",\n"
-				+ "   \"detected_date\":\"2022-04-01\",\n"
-				+ "   \"exposure_date\":\"2022-03-25\",\n"
-				+ "   \"exposure_location\":\"200 N Grand Ave, Los Angeles, CA 90012\",\n"
-				+ "   \"notes\":\"test note\"\n"
+				+ "	\"contact_id\":\"8\",\n"
+				+ "	\"case_id\":\"1\",\n"
+				+ "	\"personal_id\":\"10\",\n"
+				+ "	\"contact_date\":\"2022-04-29\",\n"
+				+ "	\"location\":\"6898 Raleigh Rd, San Jose, CA 95123\",\n"
+				+ "	\"notes\":\"Update Contact Test Success\"\n"
 				+ "}";
 	}
-	
 }

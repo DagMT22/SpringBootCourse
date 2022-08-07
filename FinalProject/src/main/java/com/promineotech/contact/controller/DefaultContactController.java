@@ -18,15 +18,29 @@ public class DefaultContactController implements ContactController {
 	private ContactService contactService;
 	
 	@Override
-	public List<Contact> fetchContact(int id) {
-		log.debug("Controller: contact Id = {}", id);
-		return contactService.fetchContacts(id);
+	public List<Contact> readContact(int ContactId) {
+		log.debug("Controller: contact Id = {}", ContactId);
+		List<Contact> result = contactService.readContacts(ContactId);
+		return result;
+		
 	}
 
 	@Override
-	public Contact CreateContact(Contact contact) {
+	public Contact createContact(Contact contact) {
 		log.debug("Controller: contact = {})", contact);
 		return contactService.createContact(contact);
+	}
+
+	@Override
+	public Contact updateContact(Contact contact) {
+		log.debug("Controller: contact = {})", contact);
+		return contactService.updateContact(contact);
+	}
+
+	@Override
+	public int deleteContact(int ContactId) {
+		log.debug("Controller: contact Id = {}", ContactId);
+		return contactService.deleteContact(ContactId);
 	}
 
 }

@@ -6,8 +6,12 @@ import com.promineotech.contact.entity.Contact;
 
 public interface ContactService {
 
-	List<Contact> fetchContacts(int id);
+	List<Contact> readContacts(int id);
 
 	Contact createContact(Contact contact);
+
+	Contact updateContact(Contact contact);
+
+	int deleteContact(int id);
 
 }

@@ -41,7 +41,7 @@ public class CreateContactTest {
 	void testCreateContactReturnsSuccess201() {
 		//given
 		String body = createContact();
-		String uri = String.format("http://localhost:%d/contacts", serverPort);
+		String uri = String.format("http://localhost:%d/contact", serverPort);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> bodyEntity = new HttpEntity<>(body, headers);

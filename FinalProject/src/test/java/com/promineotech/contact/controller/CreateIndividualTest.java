@@ -40,7 +40,7 @@ public class CreateIndividualTest {
 	void testCreateIndividualReturnsSuccess201() {
 		//given
 		String body = createIndividual();
-		String uri = String.format("http://localhost:%d/addIndividual", serverPort);
+		String uri = String.format("http://localhost:%d/individual", serverPort);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> bodyEntity = new HttpEntity<>(body, headers);

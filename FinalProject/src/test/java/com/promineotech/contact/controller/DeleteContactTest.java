@@ -2,7 +2,6 @@ package com.promineotech.contact.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,9 @@ import com.promineotech.contact.entity.Contact;
 		"classpath:sql/contact_tracing_DATA.sql"},
 		config = @SqlConfig(encoding = "utf-8"))
 
-public class ReadContactTest {
 
+public class DeleteContactTest {
+	
 	@LocalServerPort
 	private int serverPort;
 
@@ -38,46 +38,20 @@ public class ReadContactTest {
 	private TestRestTemplate restTemplate;
 	
 	@Test
-	void testContactIsReturnedWhenContactIdIsSupplied() {
+	void testContactisDeletedWhenDeleteIsRequested() {
 		//given
-		int contactId = 1;
+		int contactId = 7;
 		String uri = String.format("http://localhost:%d/contact/%d", serverPort, contactId);
 		//when
-		ResponseEntity<List<Contact>> response = restTemplate.exchange(uri,  HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+		ResponseEntity<Integer> response = restTemplate.exchange(uri, HttpMethod.DELETE, null, int.class);
+		ResponseEntity<List<Contact>> response2 = restTemplate.exchange(uri,  HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
 		//then
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		List<Contact> result = response.getBody();
-		List<Contact> expected = contactExpected();
-		assertThat(result).isEqualTo(expected);
+		assertThat(response.getBody().intValue() == 1);
 		
+		//and
+		assertThat(response2.getBody().isEmpty());
 		
 	}
-	
-//	@Test
-//	void testNoResultIsReturnedWhenContactIdDoesntExistInTable() {
-//		//given
-//		int contactId = 50;
-//		String uri = String.format("http://localhost:%d/contacts/%d", serverPort, contactId);
-//		//when
-//		ResponseEntity<List<Contact>> response2 = restTemplate.exchange(uri,  HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
-//		//then
-//		assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-//	}
 
-	private List<Contact> contactExpected() {
-		
-		List<Contact> list = new ArrayList<>();
-		
-		list.add(Contact.builder()
-				.contact_id(1)
-				.case_id(1)
-				.personal_id(2)
-				.contact_date("2022-04-20")
-				.location("85 S Second St, San Jose, CA 95113")
-				.notes("Test Note")
-				.build());
-		return list;
-	}
-	
-	
 }
