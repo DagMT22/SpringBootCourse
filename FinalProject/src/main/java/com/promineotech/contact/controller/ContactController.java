@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface ContactController {
 
 	  @Operation(summary = "Returns a Contact")
-//	  @RequestMapping(value="/contacts/{id}", method=RequestMethod.GET)  GetMapping vs RequestMapping with method - delete when finished
 	  @GetMapping(value="/contact/{ContactId}")
 	  @ResponseStatus(code = HttpStatus.OK)	
 	  List<Contact>	readContact(@PathVariable int ContactId);
